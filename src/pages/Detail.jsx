@@ -98,6 +98,7 @@ const Detail = () => {
       >
         {isSelected ? "삭제" : "추가"}
       </ActionButton>
+      <br/>
 
       <BackButton onClick={() => navigate(-1)}>뒤로 가기</BackButton>
     </DetailContainer>
