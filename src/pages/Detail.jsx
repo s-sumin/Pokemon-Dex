@@ -1,19 +1,19 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addPokemon, removePokemon } from "../redux/pokemonSlice";
 import MOCK_DATA from "../data/mock";
-import { usePokemon } from "../App";
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { selectedPokemon, addPokemon, removePokemon } = usePokemon();
+  const dispatch = useDispatch();
+  const selectedPokemon = useSelector((state) => state.pokemon.selected);
 
   const pokemon = MOCK_DATA.find((p) => p.id === parseInt(id));
   const isSelected = selectedPokemon.some((p) => p.id === pokemon?.id);
 
-  if (!pokemon) {
-    return <div>포켓몬 데이터를 찾을 수 없습니다.</div>;
-  }
+  if (!pokemon) return <div>포켓몬 데이터를 찾을 수 없습니다.</div>;
 
   return (
     <div style={{ textAlign: "center", marginTop: "40px" }}>
@@ -24,7 +24,9 @@ const Detail = () => {
 
       <button
         onClick={() =>
-          isSelected ? removePokemon(pokemon.id) : addPokemon(pokemon)
+          isSelected
+            ? dispatch(removePokemon(pokemon.id))
+            : dispatch(addPokemon(pokemon))
         }
         style={{
           marginTop: "20px",
@@ -41,7 +43,6 @@ const Detail = () => {
       </button>
 
       <br />
-
       <button
         onClick={() => navigate(-1)}
         style={{

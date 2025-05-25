@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -44,7 +45,6 @@ const StartButton = styled.button`
     padding: 12px 24px;
   }
 `;
-
 
 const Home = () => {
   const navigate = useNavigate();

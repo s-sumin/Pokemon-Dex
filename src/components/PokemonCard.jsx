@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { usePokemon } from "../App";
+import { useDispatch } from "react-redux";
+import { addPokemon } from "../redux/pokemonSlice";
 
 const Card = styled.div`
   width: 100%;
@@ -62,7 +63,7 @@ const AddButton = styled.button`
 
 const PokemonCard = ({ pokemon }) => {
   const navigate = useNavigate();
-  const { addPokemon } = usePokemon();
+  const dispatch = useDispatch();
 
   const handleCardClick = () => {
     navigate(`/detail/${pokemon.id}`);
@@ -77,7 +78,7 @@ const PokemonCard = ({ pokemon }) => {
       <AddButton
         onClick={(e) => {
           e.stopPropagation();
-          addPokemon(pokemon);
+          dispatch(addPokemon(pokemon));
         }}
       >
         추가

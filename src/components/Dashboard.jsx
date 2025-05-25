@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import pokeball from "../assets/pokeball.png";
-import { usePokemon } from "../App"; 
+import { useSelector, useDispatch } from "react-redux";
+import { removePokemon } from "../redux/pokemonSlice";
 
 const DashboardWrapper = styled.div`
   display: flex;
@@ -94,36 +95,36 @@ const PokeballSlot = styled.div`
 `;
 
 const Dashboard = () => {
-  const { selectedPokemon, removePokemon } = usePokemon();
+  const selectedPokemon = useSelector((state) => state.pokemon.selected);
+  const dispatch = useDispatch();
 
   const slots = Array(6)
     .fill(null)
     .map((_, i) => selectedPokemon[i] || null);
 
-  return (
-    <DashboardWrapper>
-      <DashboardTitle>나만의 포켓몬</DashboardTitle>
-      <SlotGrid>
-        {slots.map((pokemon, i) =>
-          pokemon ? (
-            <DashboardSlotCard key={`poke-${pokemon.id}-${i}`}>
-              <DashboardImage src={pokemon.img_url} alt={pokemon.korean_name} />
-              <DashboardName>{pokemon.korean_name}</DashboardName>
-              <DashboardNumber>
-                No. {pokemon.id.toString().padStart(3, "0")}
-              </DashboardNumber>
-              <Type>타입: {(pokemon.types ?? []).join(", ")}</Type>
-              <RemoveButton onClick={() => removePokemon(pokemon.id)}>
-                삭제
-              </RemoveButton>
-            </DashboardSlotCard>
-          ) : (
-            <PokeballSlot key={`empty-${i}`} />
-          )
-        )}
-      </SlotGrid>
-    </DashboardWrapper>
-  );
+return (
+  <DashboardWrapper>
+    <DashboardTitle>나만의 포켓몬</DashboardTitle>
+    <SlotGrid>
+      {slots.map((pokemon, i) =>
+        pokemon ? (
+          <DashboardSlotCard key={`poke-${pokemon.id}-${i}`}>
+            <DashboardImage src={pokemon.img_url} alt={pokemon.korean_name} />
+            <DashboardName>{pokemon.korean_name}</DashboardName>
+            <DashboardNumber>No. {pokemon.id.toString().padStart(3, "0")}</DashboardNumber>
+            <Type>타입: {(pokemon.types ?? []).join(", ")}</Type>
+            <RemoveButton onClick={() => dispatch(removePokemon(pokemon.id))}>
+              삭제
+            </RemoveButton>
+          </DashboardSlotCard>
+        ) : (
+          <PokeballSlot key={`empty-${i}`} />
+        )
+      )}
+    </SlotGrid>
+  </DashboardWrapper>
+);
+
 };
 
 export default Dashboard;
