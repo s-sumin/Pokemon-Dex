@@ -1,16 +1,18 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import MOCK_DATA from "../data/mock";
+import { usePokemon } from "../App";
 
-const Detail = ({ selectedPokemon, onAdd, onRemove }) => {
+const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { selectedPokemon, addPokemon, removePokemon } = usePokemon();
 
-  const pokemon = MOCK_DATA.find(p => p.id === parseInt(id));
-  const isSelected = selectedPokemon.some(p => p.id === pokemon?.id);
+  const pokemon = MOCK_DATA.find((p) => p.id === parseInt(id));
+  const isSelected = selectedPokemon.some((p) => p.id === pokemon?.id);
 
   if (!pokemon) {
-    return <div>❌ 포켓몬 데이터를 찾을 수 없습니다.</div>;
+    return <div>포켓몬 데이터를 찾을 수 없습니다.</div>;
   }
 
   return (
@@ -22,7 +24,7 @@ const Detail = ({ selectedPokemon, onAdd, onRemove }) => {
 
       <button
         onClick={() =>
-          isSelected ? onRemove(pokemon.id) : onAdd(pokemon)
+          isSelected ? removePokemon(pokemon.id) : addPokemon(pokemon)
         }
         style={{
           marginTop: "20px",

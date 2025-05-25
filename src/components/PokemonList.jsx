@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PokemonCard from "./PokemonCard";
+import { usePokemon } from "../App";
 
 const ListWrapper = styled.div`
   display: grid;
@@ -23,11 +24,13 @@ const ListWrapper = styled.div`
   }
 `;
 
-const PokemonList = ({ pokemonData, onAdd }) => {
+const PokemonList = ({ pokemonData }) => {
+  const { addPokemon } = usePokemon();
+
   return (
     <ListWrapper>
       {pokemonData.map((pokemon) => (
-        <PokemonCard key={pokemon.id} pokemon={pokemon} onAdd={onAdd} />
+        <PokemonCard key={pokemon.id} pokemon={pokemon} onAdd={addPokemon} />
       ))}
     </ListWrapper>
   );

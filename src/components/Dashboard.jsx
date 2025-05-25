@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import pokeball from "../assets/pokeball.png";
+import { usePokemon } from "../App"; 
 
 const DashboardWrapper = styled.div`
   display: flex;
@@ -92,7 +93,9 @@ const PokeballSlot = styled.div`
   background-size: 60px 60px;
 `;
 
-const Dashboard = ({ selectedPokemon, onRemove }) => {
+const Dashboard = () => {
+  const { selectedPokemon, removePokemon } = usePokemon();
+
   const slots = Array(6)
     .fill(null)
     .map((_, i) => selectedPokemon[i] || null);
@@ -106,9 +109,13 @@ const Dashboard = ({ selectedPokemon, onRemove }) => {
             <DashboardSlotCard key={`poke-${pokemon.id}-${i}`}>
               <DashboardImage src={pokemon.img_url} alt={pokemon.korean_name} />
               <DashboardName>{pokemon.korean_name}</DashboardName>
-              <DashboardNumber>No. {pokemon.id.toString().padStart(3, "0")}</DashboardNumber>
+              <DashboardNumber>
+                No. {pokemon.id.toString().padStart(3, "0")}
+              </DashboardNumber>
               <Type>타입: {(pokemon.types ?? []).join(", ")}</Type>
-              <RemoveButton onClick={() => onRemove(pokemon.id)}>삭제</RemoveButton>
+              <RemoveButton onClick={() => removePokemon(pokemon.id)}>
+                삭제
+              </RemoveButton>
             </DashboardSlotCard>
           ) : (
             <PokeballSlot key={`empty-${i}`} />

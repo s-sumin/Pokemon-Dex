@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Dex from "./pages/Dex";
 import Detail from "./pages/Detail";
-import MOCK_DATA from "./data/mock.js";
 import styled from "styled-components";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const PokemonContext = createContext();
+export const usePokemon = () => useContext(PokemonContext);
 
 const AppContainer = styled.div`
   max-width: 1280px;
@@ -36,10 +37,10 @@ function App() {
 
   const addPokemon = (pokemon) => {
     if (selectedPokemon.length >= 6) {
-      toast.error("❌ 더 이상 선택할 수 없습니다.");
+      toast.error("더 이상 선택할 수 없습니다.");
       return;
     }
-    if (selectedPokemon.find(p => p.id === pokemon.id)) {
+    if (selectedPokemon.find((p) => p.id === pokemon.id)) {
       toast.info("이미 선택된 포켓몬입니다.");
       return;
     }
@@ -48,40 +49,24 @@ function App() {
   };
 
   const removePokemon = (id) => {
-    const removed = selectedPokemon.find(p => p.id === id);
-    setSelectedPokemon(selectedPokemon.filter(p => p.id !== id));
+    const removed = selectedPokemon.find((p) => p.id === id);
+    setSelectedPokemon(selectedPokemon.filter((p) => p.id !== id));
     if (removed) toast.info(`${removed.korean_name} 삭제됨`);
   };
 
   return (
-    <AppContainer>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/dex"
-            element={
-              <Dex
-                selectedPokemon={selectedPokemon}
-                onAdd={addPokemon}
-                onRemove={removePokemon}
-              />
-            }
-          />
-          <Route
-            path="/detail/:id"
-            element={
-              <Detail
-                selectedPokemon={selectedPokemon}
-                onAdd={addPokemon}
-                onRemove={removePokemon}
-              />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer position="top-center" autoClose={2000} />
-    </AppContainer>
+    <PokemonContext.Provider value={{ selectedPokemon, addPokemon, removePokemon }}>
+      <AppContainer>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dex" element={<Dex />} />
+            <Route path="/detail/:id" element={<Detail />} />
+          </Routes>
+        </BrowserRouter>
+        <ToastContainer position="top-center" autoClose={2000} />
+      </AppContainer>
+    </PokemonContext.Provider>
   );
 }
 

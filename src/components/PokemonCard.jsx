@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { usePokemon } from "../App";
 
 const Card = styled.div`
   width: 100%;
@@ -59,8 +60,9 @@ const AddButton = styled.button`
   }
 `;
 
-const PokemonCard = ({ pokemon, onAdd }) => {
+const PokemonCard = ({ pokemon }) => {
   const navigate = useNavigate();
+  const { addPokemon } = usePokemon();
 
   const handleCardClick = () => {
     navigate(`/detail/${pokemon.id}`);
@@ -70,12 +72,12 @@ const PokemonCard = ({ pokemon, onAdd }) => {
     <Card onClick={handleCardClick}>
       <Image src={pokemon.img_url} alt={pokemon.korean_name} />
       <Name>{pokemon.korean_name}</Name>
-      <Number>No. {pokemon.id.toString().padStart(3, '0')}</Number>
+      <Number>No. {pokemon.id.toString().padStart(3, "0")}</Number>
       <Type>타입: {(pokemon.types ?? []).join(", ")}</Type>
       <AddButton
         onClick={(e) => {
           e.stopPropagation();
-          onAdd(pokemon);
+          addPokemon(pokemon);
         }}
       >
         추가
