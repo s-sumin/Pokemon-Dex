@@ -1,10 +1,8 @@
-// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
-// main.jsx
-import store from './redux/store'; // ✅ default import로 변경
+import store from './redux/store'; 
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
