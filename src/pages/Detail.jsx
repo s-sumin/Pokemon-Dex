@@ -1,59 +1,83 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components"; 
 import MOCK_DATA from "../data/mock";
+
+const DetailContainer = styled.div`
+  text-align: center;
+  margin-top: 40px;
+`;
+
+const PokemonImage = styled.img`
+  width: 200px; 
+  height: auto;
+`;
+
+const PokemonName = styled.h2`
+  color: red;
+`;
+
+const PokemonInfo = styled.p`
+  margin-bottom: 8px;
+`;
+
+const ActionButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: ${(props) => (props.$isSelected ? "red" : "#4CAF50")};
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const BackButton = styled.button`
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
 
 const Detail = ({ selectedPokemon, onAdd, onRemove }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const pokemon = MOCK_DATA.find(p => p.id === parseInt(id));
-  const isSelected = selectedPokemon.some(p => p.id === pokemon?.id);
+  const pokemon = MOCK_DATA.find((p) => p.id === parseInt(id));
+  const isSelected = selectedPokemon.some((p) => p.id === pokemon?.id);
 
   if (!pokemon) {
-    return <div>❌ 포켓몬 데이터를 찾을 수 없습니다.</div>;
+    return <div>포켓몬 데이터를 찾을 수 없습니다.</div>;
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <img src={pokemon.img_url} alt={pokemon.korean_name} />
-      <h2 style={{ color: "red" }}>{pokemon.korean_name}</h2>
-      <p>타입: {(pokemon.types ?? []).join(", ")}</p>
-      <p>{pokemon.description}</p>
+    <DetailContainer>
+      <PokemonImage src={pokemon.img_url} alt={pokemon.korean_name} />
+      <PokemonName>{pokemon.korean_name}</PokemonName>
+      <PokemonInfo>타입: {(pokemon.types ?? []).join(", ")}</PokemonInfo>
+      <PokemonInfo>{pokemon.description}</PokemonInfo>
 
-      <button
-        onClick={() =>
-          isSelected ? onRemove(pokemon.id) : onAdd(pokemon)
-        }
-        style={{
-          marginTop: "20px",
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "8px",
-          backgroundColor: isSelected ? "red" : "#4CAF50",
-          color: "white",
-          cursor: "pointer",
-          fontWeight: "bold",
-        }}
+      <ActionButton
+        $isSelected={isSelected} 
+        onClick={() => (isSelected ? onRemove(pokemon.id) : onAdd(pokemon))}
       >
         {isSelected ? "삭제" : "추가"}
-      </button>
+      </ActionButton>
 
       <br />
 
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginTop: "12px",
-          padding: "8px 16px",
-          border: "none",
-          borderRadius: "8px",
-          backgroundColor: "#f2f2f2",
-          cursor: "pointer",
-        }}
-      >
-        뒤로 가기
-      </button>
-    </div>
+      <BackButton onClick={() => navigate(-1)}>뒤로 가기</BackButton>
+    </DetailContainer>
   );
 };
 

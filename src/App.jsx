@@ -36,7 +36,7 @@ function App() {
 
   const addPokemon = (pokemon) => {
     if (selectedPokemon.length >= 6) {
-      toast.error("❌ 더 이상 선택할 수 없습니다.");
+      toast.error("더 이상 선택할 수 없습니다.");
       return;
     }
     if (selectedPokemon.find(p => p.id === pokemon.id)) {
