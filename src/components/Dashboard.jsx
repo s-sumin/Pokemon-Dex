@@ -24,13 +24,22 @@ const SlotGrid = styled.div`
   width: 100%;
   justify-items: center;
 
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
   @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
 const DashboardSlotCard = styled.div`
-  width: 160px;
+  width: 100%;
+  max-width: 160px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   padding: 16px;
@@ -52,6 +61,12 @@ const DashboardNumber = styled.p`
   color: gray;
 `;
 
+const Type = styled.p`
+  font-size: 13px;
+  color: #555;
+  margin: 4px 0;
+`;
+
 const RemoveButton = styled.button`
   margin-top: 10px;
   padding: 6px 12px;
@@ -68,7 +83,8 @@ const RemoveButton = styled.button`
 `;
 
 const PokeballSlot = styled.div`
-  width: 160px;
+  width: 100%;
+  max-width: 160px;
   height: 208px;
   border: 2px dashed #ccc;
   border-radius: 12px;
@@ -77,7 +93,9 @@ const PokeballSlot = styled.div`
 `;
 
 const Dashboard = ({ selectedPokemon, onRemove }) => {
-  const slots = Array(6).fill(null).map((_, i) => selectedPokemon[i]);
+  const slots = Array(6)
+    .fill(null)
+    .map((_, i) => selectedPokemon[i] || null);
 
   return (
     <DashboardWrapper>
@@ -85,14 +103,15 @@ const Dashboard = ({ selectedPokemon, onRemove }) => {
       <SlotGrid>
         {slots.map((pokemon, i) =>
           pokemon ? (
-            <DashboardSlotCard key={pokemon.id}>
+            <DashboardSlotCard key={`poke-${pokemon.id}-${i}`}>
               <DashboardImage src={pokemon.img_url} alt={pokemon.korean_name} />
               <DashboardName>{pokemon.korean_name}</DashboardName>
-              <DashboardNumber>No. {pokemon.id.toString().padStart(3, '0')}</DashboardNumber>
+              <DashboardNumber>No. {pokemon.id.toString().padStart(3, "0")}</DashboardNumber>
+              <Type>타입: {(pokemon.types ?? []).join(", ")}</Type>
               <RemoveButton onClick={() => onRemove(pokemon.id)}>삭제</RemoveButton>
             </DashboardSlotCard>
           ) : (
-            <PokeballSlot key={i} />
+            <PokeballSlot key={`empty-${i}`} />
           )
         )}
       </SlotGrid>
